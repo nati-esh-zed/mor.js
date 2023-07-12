@@ -1,5 +1,5 @@
 
-import element from "../html/element.mjs";
+import element from "/modules/html/element.js";
 
 let custom_range_input_id_top = 0;
 

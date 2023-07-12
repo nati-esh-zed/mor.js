@@ -1,4 +1,4 @@
-import element from "../html/element.mjs";
+import element from "/modules/html/element.js";
 
 
 const page_not_found = function(page)

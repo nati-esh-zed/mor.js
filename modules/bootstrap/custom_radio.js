@@ -1,4 +1,4 @@
-import element from "../html/element.mjs";
+import element from "/modules/html/element.js";
 
 let custom_radio_input_id_top = 0;
 

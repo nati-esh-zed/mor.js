@@ -1,4 +1,4 @@
-import element from "./element.mjs";
+import element from "/modules/html/element.js";
 
 const fragment = function(elements)
 {

@@ -1,12 +1,12 @@
 
-import cookie from '../lib/cookie/cookie.mjs';
-import fragment from './html/fragment.mjs'; 
-import stylesheet from './stylesheet.mjs';
-import header from './header.mjs';
-import navbar from './navbar.mjs';
-import contents from './contents.mjs';
-import { default_theme, theme_type } from './theme/default.mjs';
-import { navbar_collapse, navbar_search } from './navbar_collapse.mjs';
+import cookie from '/lib/cookie/module/cookie.js';
+import fragment from '/modules/html/fragment.js'; 
+import stylesheet from '/modules/stylesheet.js';
+import header from '/modules/header.js';
+import navbar from '/modules/navbar.js';
+import contents from '/modules/contents.js';
+import { default_theme, theme_type } from '/modules/theme/default.js';
+import { navbar_collapse, navbar_search } from '/modules/navbar_collapse.js';
 
 export let theme = default_theme;
 export let themetype = theme_type;

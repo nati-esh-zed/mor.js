@@ -1,11 +1,11 @@
-import element from "../html/element.mjs";
-import custom_file from "../bootstrap/custom_file.mjs";
-import custom_checkbox from "../bootstrap/custom_checkbox.mjs";
-import custom_switch from "../bootstrap/custom_switch.mjs";
-import custom_radio from "../bootstrap/custom_radio.mjs";
-import custom_select from "../bootstrap/custom_select.mjs";
-import custom_range from "../bootstrap/custom_range.mjs";
-import custom_input from "../bootstrap/custom_input.mjs";
+import element from "/modules/html/element.js";
+import custom_file from "/modules/bootstrap/custom_file.js";
+import custom_checkbox from "/modules/bootstrap/custom_checkbox.js";
+import custom_switch from "/modules/bootstrap/custom_switch.js";
+import custom_radio from "/modules/bootstrap/custom_radio.js";
+import custom_select from "/modules/bootstrap/custom_select.js";
+import custom_range from "/modules/bootstrap/custom_range.js";
+import custom_input from "/modules/bootstrap/custom_input.js";
 
 export const bootstrap = function(theme, theme_type)
 {

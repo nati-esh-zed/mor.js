@@ -1,5 +1,5 @@
 
-import Jxp from '../../lib/jxp/Jxp.mjs';
+import Jxp from '/lib/jxp/module/Jxp.js';
 
 export let default_theme = new Jxp();
 

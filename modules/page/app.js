@@ -1,5 +1,5 @@
 
-import element from '../html/element.mjs';
+import element from '/modules/html/element.js';
 
 let app_states = { counter: 0 };
 

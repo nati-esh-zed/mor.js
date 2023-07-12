@@ -1,7 +1,7 @@
 
-import fragment from './html/fragment.mjs';
-import element from './html/element.mjs';
-import navindex from './navindex.mjs';
+import fragment from '/modules/html/fragment.js';
+import element from '/modules/html/element.js';
+import navindex from '/modules/navindex.js';
 
 const nav_items = function(page)
 {
