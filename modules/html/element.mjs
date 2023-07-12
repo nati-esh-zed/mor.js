@@ -4,29 +4,58 @@ const element = function(tag, params)
     let e = document.createElement(tag);
     if(params instanceof Object)
     {
+        let e_value = undefined;
         let attributes = Object.entries(params);
         for(let [key, value] of attributes)
         {
             if(key == 'class')
             {
                 let classes = value;
-                if(typeof(value) === 'string')
-                    classes = value.split(' ');
+                if(typeof(classes) === 'string')
+                {
+                    classes = classes.replaceAll(/\s+/g, ' ');
+                    classes = classes.trim();
+                    classes = classes.split(' ');
+                }
                 if(classes instanceof Array)
                 {
                     for(let class_ of classes)
                     {
-                        e.classList.add(class_);
+                        class_ = class_.trim();
+                        if(class_.length > 0)
+                        {
+                            e.classList.add(class_);
+                        }
                     }
                 }
                 else
                     console.error(classes);
             }
+            else if(key == 'value')
+            {
+                e_value = value;
+            }
+            else if(key == 'checked')
+            {
+                e.checked = !value ? undefined : true;
+            }
+            else if(key == 'selected')
+            {
+                e.selected = !value ? undefined : true;
+            }
+            else if(key == 'disabled')
+            {
+                e.disabled = !value ? undefined : true;
+            }
+            else if(key == 'autofocus')
+            {
+                e.autofocus = !value ? undefined : true;
+            }
             else if(key == 'html')
             {
                 if(typeof(value) === 'string')
                 {
-                    e.appendChild(document.createTextNode(value));
+                    e.innerHTML += value;
                 }
                 else if(value instanceof HTMLElement || value instanceof DocumentFragment)
                 {
@@ -38,9 +67,9 @@ const element = function(tag, params)
                     {
                         if(typeof(element) === 'string')
                         {
-                            e.appendChild(document.createTextNode(element));
+                            e.innerHTML += element;
                         }
-                        else if(element instanceof HTMLElement || element instanceof DocumentFragment)
+                        else if(element instanceof Node || element instanceof DocumentFragment)
                         {
                             e.appendChild(element);
                         }
@@ -69,6 +98,10 @@ const element = function(tag, params)
             {
                 e.setAttribute(key, value);
             }
+        }
+        if(e_value !== undefined)
+        {
+            e.value = e_value;
         }
     }
     return e;

@@ -1,10 +1,10 @@
 
 import element from './html/element.mjs'; 
 
-const header = function(title)
+export const header = function(title)
 {
     return element('div', {
-        class: 'jxp(header)',
+        class: 'jxp:header',
         html: element('h1', {
             html: title
         })
