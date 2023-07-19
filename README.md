@@ -1,6 +1,6 @@
 # mor.js
 
-A JavaScript framework experiment using modules.
+A Javascript framework experiment using modules.
 
 ## sample code
 
