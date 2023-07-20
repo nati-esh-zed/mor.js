@@ -90,6 +90,7 @@ export class App
     #states               = { page: null, theme: null, };
     #state_load_listeners = {};
     
+    #title        = null;
     #storage      = null;
     #target       = null;
     #themes       = null;
@@ -102,16 +103,38 @@ export class App
     #theme_target         = document.head;
     #theme_scripts_target = document.body;
 
-    constructor(target_or_params, main, page_index, themes, theme, storage, custom_storage)
+    /**
+     * 
+     * @param {Node|string|object} target_or_params valid HTML Node, or query string, or object map of consrtuctor params
+     * @param {string} title document.title
+     * @param {function} main main function called on reload to populate the target
+     * @param {PageIndex} page_index PageIndex for mapping page to function
+     * @param {object} themes registry of themes
+     * @param {string} theme valid key of themes
+     * @param {string} storage storage key. one of App.storages() 
+     * @param {object} custom_storage custom storage to add to the instance storages. 
+     *  `{
+     *      name:   'name', 
+     *      get:    function(key){...}, 
+     *      set:    function(key, value){...}, 
+     *      delete: function(key){...} 
+     *  }`
+     */
+    constructor(target_or_params, title, main, page_index, themes, theme, storage, custom_storage)
     {
         let target = null;
-        if(target_or_params instanceof Node)
+        if(typeof(target_or_params) == 'string')
+        {
+            target = target_or_params;
+        }
+        else if(target_or_params instanceof Node)
         {
             target = target_or_params;
         }
         else if(target_or_params instanceof Object)
         {
             target          = target_or_params.target;
+            title           = target_or_params.title;
             main            = target_or_params.main;
             page_index      = target_or_params.page_index;
             themes          = target_or_params.themes;
@@ -119,45 +142,59 @@ export class App
             storage         = target_or_params.storage;
             custom_storage  = target_or_params.custom_storage;
         }
+        else
+        {
+            throw Error('App argument `target_or_params` must be either of `Node`, `string`, or `object`.'); 
+        }
+        if(typeof(target) == 'string')
+            target = document.querySelector(target);
+        if(!target)
+            throw Error('App argument `target` must not be be null.');
         if(!!target && !target instanceof Node)
-            throw 'App argument `target` must be instance of `Node`.';
+            throw Error('App argument `target` must be instance of `Node`.');
+        if(!!title && typeof(title) !='string')
+            throw Error('App argument `title` must be of type `string`.');
         if(!!main && typeof(main) != 'function')
-            throw 'App argument `main` must be of type `function`.';
+            throw Error('App argument `main` must be of type `function`.');
         if(!!page_index && !page_index instanceof PageIndex)
-            throw 'App argument `page_index` must be instance of `PageIndex`.';
+            throw Error('App argument `page_index` must be instance of `PageIndex`.');
         if(!!themes && !themes instanceof Object)
-            throw 'App argument `themes` must be instance of `Object`.';
+            throw Error('App argument `themes` must be instance of `Object`.');
         if(!!theme && typeof(theme) !='string')
-            throw 'App argument `theme` must be of type `string`.';
+            throw Error('App argument `theme` must be of type `string`.');
         if(!!storage && typeof(storage) !='string')
-            throw 'App argument `storage` must be of type `string`.';
+            throw Error('App argument `storage` must be of type `string`.');
         if(!!custom_storage)
         {
             if(!custom_storage instanceof Object)
-                throw 'App argument `custom_storage` must be instance of `Object`.';
+                throw Error('App argument `custom_storage` must be instance of `Object`.');
             if(!custom_storage['name'] || !custom_storage['get'] || !custom_storage['set'])
-                throw 'App argument `custom_storage` must have `name`, `get` and `set` defined.';
+                throw Error('App argument `custom_storage` must have `name`, `get` and `set` defined.');
             if(typeof(custom_storage.name) != 'string')
-                throw 'App argument `custom_storage.name` must be of type `string`.';
+                throw Error('App argument `custom_storage.name` must be of type `string`.');
             if(typeof(custom_storage.get) != 'function')
-                throw 'App argument `custom_storage.get` must be a `function`.';
+                throw Error('App argument `custom_storage.get` must be a `function`.');
             if(typeof(custom_storage.set) != 'function')
-                throw 'App argument `custom_storage.set` must be a `function`.';
+                throw Error('App argument `custom_storage.set` must be a `function`.');
             if(typeof(custom_storage.delete) != 'function')
-                throw 'App argument `custom_storage.delete` must be a `function`.';
+                throw Error('App argument `custom_storage.delete` must be a `function`.');
             this.#storages[custom_storage.name] = custom_storage;
         }
         storage = !!storage ? storage : 'local';
         if(!this.#storages[storage])
-            throw 'App argument `storage` must be one of '+Object.keys(this.#storages);
+            throw Error('App argument `storage` must be one of ')+Object.keys(this.#storages);
         this.#storage      = this.#storages[storage];
         this.#target       = !!target     ? target     : null;
         this.#main         = !!main       ? main       : null;
         this.#page_index   = !!page_index ? page_index : null;
         this.#themes       = !!themes     ? themes     : null;
         this.load_states();
-        const state_page  = this.get_state(null, 'page')
-        const state_theme = this.get_state(null, 'theme')
+        const state_title = this.get_state(null, 'title');
+        const state_page  = this.get_state(null, 'page');
+        const state_theme = this.get_state(null, 'theme');
+        title = !!state_title ? state_title : title;
+        if(!!title)
+            this.set_title(title);
         this.set_page(!!state_page ? state_page : null, false);
         this.set_theme(!!state_theme ? state_theme : theme, false);
         this.add_state_load_listener(null, function(app, states)
@@ -332,11 +369,18 @@ export class App
         return null;
     }
 
+    set_title(title)
+    {
+        title = !!title ? title : '';
+        this.#title = title;
+        document.title = title;
+    }
+
     set_storage(storage, dont_remove_from_previous, reload)
     {
         storage = !!storage ? storage : 'local';
         if(!this.#storages[storage])
-            throw 'App argument `storage` must be one of '+Object.keys(this.#storages);
+            throw Error('App argument `storage` must be one of ')+Object.keys(this.#storages);
         // check if storage is same
         if(this.#storages[storage] === this.#storage)
             return true;
@@ -410,6 +454,7 @@ export class App
             this.reload(...args);
     }
 
+    title()       { return this.#title; }
     storages()    { return Object.keys(this.#storages); }
     storage()     { return this.#storage; }
     states()      { return this.#states; }

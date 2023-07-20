@@ -12,7 +12,7 @@ export class Theme extends Jxp
     append_stylesheets(target)
     {
         if(!!target && !target instanceof Node)
-            throw 'Theme.append_stylesheets argument `target` must be instance of `Node`.';
+            throw Error('Theme.append_stylesheets argument `target` must be instance of `Node`.');
         if(!!target && !!this.#stylesheets && this.#stylesheets.length > 0)
         {
             let e = element('div', {
@@ -44,7 +44,7 @@ export class Theme extends Jxp
     append_scripts(target)
     {
         if(!!target && !target instanceof Node)
-            throw 'Theme.append_scripts argument `target` must be instance of `Node`.';
+            throw Error('Theme.append_scripts argument `target` must be instance of `Node`.');
         if(!!target && !!this.#scripts && this.#scripts.length > 0)
         {
             let e = element('div', {
