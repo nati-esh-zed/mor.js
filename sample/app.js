@@ -1,6 +1,6 @@
 
-import App    from '../App.js';
-import html   from '../html/html.js';
+import App    from '../morjs/App.js';
+import html   from '../morjs/html/html.js';
 import R      from './R.js';
 import themes from './themes.js';
 

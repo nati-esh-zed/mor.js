@@ -42,11 +42,11 @@ export class App
         this.#themes      = !!themes     ? themes     : null;
         this.set_page(!!saved_states ? saved_states.page : null, false);
         this.set_theme(!!saved_states ? saved_states.theme : theme_key, false);
-        // this.add_state_load_listener(null, function(app, states)
-        // {
-        //     app.set_page(app.get_state(null, 'page'), true);
-        //     app.set_theme(app.get_state(null, 'theme'));
-        // });
+        this.add_state_load_listener(null, function(app, states)
+        {
+            app.set_page(app.get_state(null, 'page'), true);
+            app.set_theme(app.get_state(null, 'theme'));
+        });
     }
 
     set_state(page, state_key, state_value)
@@ -105,7 +105,7 @@ export class App
 
     save_states()
     {
-        let cookie_val = null;// 'page='+this.#page+'&theme_key='+this.#theme_key;
+        let cookie_val = null;
         if(!!this.#states)
         {
             for(let [key, value] of Object.entries(this.#states))
@@ -130,7 +130,6 @@ export class App
             }
         }
         cookie.set(this.#cookie_name, cookie_val);
-        // console.log(cookie.get(this.#cookie_name));
     }
 
     load_states()
@@ -154,7 +153,6 @@ export class App
                 else
                     states[key] = value;
             }
-            // console.log(states);
             for(let page_i of [null, this.#page])
             {
                 if(!!this.#state_load_listeners[page_i])
@@ -166,7 +164,6 @@ export class App
             this.#states = states;
             return this.#states;
         }
-        // console.log(cookie.get(this.#cookie_name));
         return null;
     }
 
@@ -188,7 +185,7 @@ export class App
                 if(html instanceof Node || html instanceof DocumentFragment)
                     this.#target.replaceChildren(html);
                 else if(typeof(html) == 'string')
-                    this.#target.innerHTML += html;
+                    this.#target.innerHTML = html;
             }
         }
         if(this.#theme)

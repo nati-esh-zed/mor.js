@@ -17,9 +17,9 @@ export class cookie
             expires = "expires=" + d.toUTCString();
         }
         document.cookie = name + "=" 
-            + ((value) ? value : '')
-            + ((path) ? ";path="+path:"")
-            + ((domain)?";domain="+domain:"")
+            + ((!!value)  ? value : '')
+            + ((!!path)   ? ";path="+path:"")
+            + ((!!domain) ? ";domain="+domain:"")
             + ";" + expires;
     }
     
@@ -27,19 +27,22 @@ export class cookie
     {
         if(this.get(name)) 
         {
+            const d = new Date();
+            d.setTime(0);
+            expires = "expires=" + d.toUTCString();
             document.cookie = name + '='
-                + ((path) ? ';path='+path:'')
-                + ((domain)?';domain='+domain:'')
-                + ';expires=Thu, 01 Jan 1970 00:00:01 GMT';
+                + ((!!path) ? ';path='+path:'')
+                + ((!!domain)?';domain='+domain:'')
+                + expires;
             return true;
         }
         return false;
     }
     
-    static get(cname) 
+    static get(name) 
     {
-        let name = cname + "=";
-        let ca   = document.cookie.split(';');
+        let cname = name + "=";
+        let ca    = document.cookie.split(';');
         for(let i = 0; i < ca.length; i++) 
         {
             let c = ca[i]; 

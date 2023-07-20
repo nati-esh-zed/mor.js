@@ -1,6 +1,6 @@
 
-import html  from '../html/html.js';
-import Theme from '../Theme.js';
+import html  from '../morjs/html/html.js';
+import Theme from '../morjs/Theme.js';
 
 export const themes = {
     default: new Theme('default', 
