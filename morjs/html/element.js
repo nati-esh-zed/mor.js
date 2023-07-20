@@ -27,6 +27,8 @@ export const element = function(tag, params)
                 {
                     for(let class_ of classes)
                     {
+                        if(typeof(class_) != 'string')
+                            throw TypeError('expecting a `string`.');
                         class_ = class_.trim();
                         if(class_.length > 0)
                         {
@@ -35,7 +37,7 @@ export const element = function(tag, params)
                     }
                 }
                 else
-                    console.error(classes);
+                    throw TypeError('expecting a `string` or `array of strings`.');
             }
             else if(key == 'value')
             {
@@ -101,7 +103,7 @@ export const element = function(tag, params)
                     e.addEventListener(event_id, value);
                 }
                 else
-                    console.error(value);
+                    throw TypeError('expecting a `function`.');
             }
             else
             {

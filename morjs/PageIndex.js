@@ -17,9 +17,9 @@ export class PageIndex
     constructor(page_map, default_page)
     {
         if(!!page_map && !page_map instanceof Object)
-            throw Error('PageIndex argument `page_map` must be instance of `Object`.');
+            throw TypeError('PageIndex argument `page_map` must be instance of `Object`.');
         if(!!default_page && typeof(default_page) != 'string')
-            throw Error('PageIndex argument `default_page` must be of type `string`.');
+            throw TypeError('PageIndex argument `default_page` must be of type `string`.');
         if(!!page_map)
         {
             for(let [page, func] of Object.entries(page_map))

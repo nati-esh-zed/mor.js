@@ -144,45 +144,45 @@ export class App
         }
         else
         {
-            throw Error('App argument `target_or_params` must be either of `Node`, `string`, or `object`.'); 
+            throw TypeError('App argument `target_or_params` must be either of `Node`, `string`, or `object`.'); 
         }
         if(typeof(target) == 'string')
             target = document.querySelector(target);
         if(!target)
-            throw Error('App argument `target` must not be be null.');
+            throw TypeError('App argument `target` must not be be null.');
         if(!!target && !target instanceof Node)
-            throw Error('App argument `target` must be instance of `Node`.');
+            throw TypeError('App argument `target` must be instance of `Node`.');
         if(!!title && typeof(title) !='string')
-            throw Error('App argument `title` must be of type `string`.');
+            throw TypeError('App argument `title` must be of type `string`.');
         if(!!main && typeof(main) != 'function')
-            throw Error('App argument `main` must be of type `function`.');
+            throw TypeError('App argument `main` must be of type `function`.');
         if(!!page_index && !page_index instanceof PageIndex)
-            throw Error('App argument `page_index` must be instance of `PageIndex`.');
+            throw TypeError('App argument `page_index` must be instance of `PageIndex`.');
         if(!!themes && !themes instanceof Object)
-            throw Error('App argument `themes` must be instance of `Object`.');
+            throw TypeError('App argument `themes` must be instance of `Object`.');
         if(!!theme && typeof(theme) !='string')
-            throw Error('App argument `theme` must be of type `string`.');
+            throw TypeError('App argument `theme` must be of type `string`.');
         if(!!storage && typeof(storage) !='string')
-            throw Error('App argument `storage` must be of type `string`.');
+            throw TypeError('App argument `storage` must be of type `string`.');
         if(!!custom_storage)
         {
             if(!custom_storage instanceof Object)
-                throw Error('App argument `custom_storage` must be instance of `Object`.');
+                throw TypeError('App argument `custom_storage` must be instance of `Object`.');
             if(!custom_storage['name'] || !custom_storage['get'] || !custom_storage['set'])
-                throw Error('App argument `custom_storage` must have `name`, `get` and `set` defined.');
+                throw TypeError('App argument `custom_storage` must have `name`, `get`, `set` and `delete` defined.');
             if(typeof(custom_storage.name) != 'string')
-                throw Error('App argument `custom_storage.name` must be of type `string`.');
+                throw TypeError('App argument `custom_storage.name` must be of type `string`.');
             if(typeof(custom_storage.get) != 'function')
-                throw Error('App argument `custom_storage.get` must be a `function`.');
+                throw TypeError('App argument `custom_storage.get` must be a `function`.');
             if(typeof(custom_storage.set) != 'function')
-                throw Error('App argument `custom_storage.set` must be a `function`.');
+                throw TypeError('App argument `custom_storage.set` must be a `function`.');
             if(typeof(custom_storage.delete) != 'function')
-                throw Error('App argument `custom_storage.delete` must be a `function`.');
+                throw TypeError('App argument `custom_storage.delete` must be a `function`.');
             this.#storages[custom_storage.name] = custom_storage;
         }
         storage = !!storage ? storage : 'local';
         if(!this.#storages[storage])
-            throw Error('App argument `storage` must be one of ')+Object.keys(this.#storages);
+            throw TypeError('App argument `storage` must be one of ')+Object.keys(this.#storages);
         this.#storage      = this.#storages[storage];
         this.#target       = !!target     ? target     : null;
         this.#main         = !!main       ? main       : null;
@@ -380,7 +380,7 @@ export class App
     {
         storage = !!storage ? storage : 'local';
         if(!this.#storages[storage])
-            throw Error('App argument `storage` must be one of ')+Object.keys(this.#storages);
+            throw TypeError('App argument `storage` must be one of ')+Object.keys(this.#storages);
         // check if storage is same
         if(this.#storages[storage] === this.#storage)
             return true;
